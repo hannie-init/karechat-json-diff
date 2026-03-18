@@ -1,0 +1,4 @@
+.diff_result.json
+.merge_log.json
+__pycache__/
+*.pyc
