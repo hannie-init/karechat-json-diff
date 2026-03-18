@@ -58,8 +58,26 @@ karechat-json-diff/
 ├── SKILL.md                  # 스킬 정의 및 워크플로우
 └── scripts/
     ├── compare_json.py       # 두 JSON 파일 비교 (API별 diff)
-    └── merge_json.py         # 선택한 API 병합
+    ├── merge_json.py         # 선택한 API 병합
+    └── validate_json.py      # 병합 결과 구조 검증
 ```
+
+## JSON 구조 검증 항목
+
+병합 완료 후 `validate_json.py`가 자동으로 아래 항목을 검증합니다.
+
+| 구분 | 검증 항목 | 수준 |
+|---|---|---|
+| 최상위 구조 | `request`, `response` 키 존재 여부 | ❌ 오류 |
+| request API | `methodType` 존재 및 GET/POST/PUT/DELETE 유효성 | ❌ 오류 |
+| request API | `subPath` 존재 여부 | ❌ 오류 |
+| request API | `parameter` 각 필드의 `dataType`, `split` 존재 여부 | ❌ 오류 |
+| response API | `success`, `error`, `data` 키 존재 여부 | ⚠️ 경고 |
+| 일관성 | request에만 있거나 response에만 있는 API | ⚠️ 경고 |
+| 공통 설정 | `request.urlPath` 존재 여부 | ⚠️ 경고 |
+
+- ❌ **오류**: 계속 진행 여부를 사용자에게 확인
+- ⚠️ **경고**: 참고용으로 표시 후 계속 진행
 
 ### JSON 구조
 

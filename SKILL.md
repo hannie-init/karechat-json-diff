@@ -69,7 +69,22 @@ python3 <skill_base_dir>/scripts/merge_json.py \
 
 ### Step 5 — 최종 검증 및 확인
 
-병합 후 **merged 파일과 원본 target 파일**을 `compare_json.py`로 다시 비교하여 실제 반영 결과를 사용자에게 보여준다.
+병합 후 두 가지 검증을 순서대로 실행한다.
+
+#### 5-1. 구조 검증
+
+`scripts/validate_json.py`로 merged 파일의 karechat JSON 구조를 검증한다:
+
+```bash
+python3 <skill_base_dir>/scripts/validate_json.py <merged_path>
+```
+
+- ❌ **오류** (methodType 누락/잘못된 값 등): 사용자에게 알리고 계속 진행 여부를 묻는다
+- ⚠️  **경고** (request/response 짝이 맞지 않는 API 등): 참고용으로 보여주고 계속 진행
+
+#### 5-2. diff 재검증
+
+**merged 파일과 원본 target 파일**을 `compare_json.py`로 다시 비교하여 실제 반영 결과를 사용자에게 보여준다.
 
 - DEV → PROD인 경우: `compare_json.py <merged> <original_prod>`
 - PROD → DEV인 경우: `compare_json.py <merged> <original_dev>`
@@ -108,6 +123,7 @@ python3 <skill_base_dir>/scripts/compare_json.py <merged_path> <original_target_
 |---|---|
 | `scripts/compare_json.py` | 두 JSON을 비교하여 diff 출력 및 `.diff_result.json` 저장 |
 | `scripts/merge_json.py` | 선택한 API를 source에서 target으로 복사하여 병합 JSON 생성 |
+| `scripts/validate_json.py` | merged JSON의 karechat 구조 검증 (필수 필드, methodType, request/response 일관성) |
 
 ## JSON 구조 참고
 
